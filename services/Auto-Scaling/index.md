@@ -10,6 +10,13 @@
 In {{site.data.keyword.Bluemix_notm}}, you can automatically manage your application capacity. Use the  {{site.data.keyword.autoscalingfull}} service to automatically increase or decrease the compute capacity of your application. The number of application instances are adjusted dynamically based on the {{site.data.keyword.autoscaling}} policy that you define.
 {:shortdesc} 
 
+## Contents
+  * [Using the {{site.data.keyword.autoscaling}} service in {{site.data.keyword.Bluemix_notm}}](#as-service)
+  * [Manage {{site.data.keyword.autoscaling}} service through RESTful API](#publicAPI)
+  * [Manage {{site.data.keyword.autoscaling}} service through {{site.data.keyword.autoscaling}} CLI](#CLI)
+  * [Policy fields for the {{site.data.keyword.autoscaling}} service](#policyfields)
+  * [Error messages](#errmsgs)
+
 ## Using the {{site.data.keyword.autoscaling}} service in {{site.data.keyword.Bluemix_notm}}
 {: #as-service}
 
