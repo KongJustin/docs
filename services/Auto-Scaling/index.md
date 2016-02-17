@@ -7,12 +7,12 @@
 
 *Last updated: 18 January 2015*
 
-In {{site.data.keyword.Bluemix_notm}}, you can automatically manage your application capacity. Use the  {{site.data.keyword.autoscalingfull}} service to automatically increase or decrease the compute capacity of your application. The number of application instances are adjusted dynamically based on the {{site.data.keyword.autoscaling}} policy that you define.
+In {{site.data.keyword.Bluemix_notm}}, you can automatically manage your application capacity. Use the  {{site.data.keyword.autoscalingfull}} service to automatically increase or decrease the compute capacity of your application. The number of application instances are adjusted dynamically based on the {{site.data.keyword.autoscaling}} policy that you define. There are several ways to define {{site.data.keyword.autoscaling}} policy and get {{site.data.keyword.autoscaling}} data which will be covered in the following part of this document.
 {:shortdesc} 
 
 ## Contents
   * [Using the {{site.data.keyword.autoscaling}} service in {{site.data.keyword.Bluemix_notm}}](#as-service)
-  * [Manage {{site.data.keyword.autoscaling}} service through RESTful API](#publicAPI)
+  * [Manage {{site.data.keyword.autoscaling}} service through RESTful API](#RESTAPI)
   * [Manage {{site.data.keyword.autoscaling}} service through {{site.data.keyword.autoscaling}} CLI](#CLI)
   * [Policy fields for the {{site.data.keyword.autoscaling}} service](#policyfields)
   * [Error messages](#errmsgs)
@@ -50,13 +50,13 @@ If the workload of your application changes dramatically during the peak time an
 </dl>
 
 ## Manage {{site.data.keyword.autoscaling}} service through RESTful API 
-{: #publicAPI}
+{: #RESTAPI}
 
 With the introduction of {{site.data.keyword.autoscaling}} RESTful API, now you have an alternative way to manage {{site.data.keyword.autoscaling}} service beside the Bluemix UI, it also support the scaling data retrieval and analysis. Currently it provide similar functionality in {{site.data.keyword.Bluemix_notm}} UI with API like Create Policy and Get Scaling History
 
-To use the {{site.data.keyword.autoscaling}} RESTful API to manage {{site.data.keyword.autoscaling}} service, you need to prepare the following prerequisites: Bind {{site.data.keyword.autoscaling}} service with your application as specified in above section, acquire AccessToken, the URL of {{site.data.keyword.autoscaling} API server and the app_id of the Application of you want to scale in/out:
+To use the {{site.data.keyword.autoscaling}} RESTful API to manage {{site.data.keyword.autoscaling}} service, you need to prepare the following prerequisites: Bind {{site.data.keyword.autoscaling}} service with your application as specified in above section, acquire AccessToken, the URL of {{site.data.keyword.autoscaling} API server and the app_id of the application of you want to scale in/out:
 
-1. For security purpose, in each request header of {{site.data.keyword.autoscaling}} RESTful API, a proper AccessToken obtained through CloudFoundry UAA procedure should be provided to indicate necessary validation of the request, fail to comply with this will trigger a 401 Unauthorized response, there are two ways you can get this AccessToken after you have installed CloudFoundry command line tool and logged in: you can obtain this token through cf oauth-token command:
+1. For security purpose, in each request header of {{site.data.keyword.autoscaling}} RESTful API, a proper AccessToken obtained through CloudFoundry UAA procedure should be provided in Authorization header to indicate necessary validation of the request, fail to comply with this will trigger a 401 Unauthorized response, there are two ways you can get this AccessToken after you have installed CloudFoundry command line tool and logged in: you can obtain this token through cf oauth-token command:
    ```
    > cf oauth-token
    Getting OAuth token...
@@ -64,8 +64,9 @@ To use the {{site.data.keyword.autoscaling}} RESTful API to manage {{site.data.k
 
      bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJhNjIzMGE1YS1mNzE3LTQ0YjItOWM3Yi1kNGJkYThhZGU0NjkiLCJzdWIiOiI4OGViNjM2My1hMjkzLTRlZTItYWQ1MS0yOGVkMTZmZjMwNzQiLCJzY29wZSI6WyJjbG91ZF9jb250cm9sbGVyLnJlYWQiLCJwYXNzd29yZC53cml0ZSIsImNsb3VkX2NvbnRyb2xsZXIud3JpdGUiLCJvcGVuaWQiXSwiY2xpZW50X2lkIjoiY2YiLCJjaWQiOiJjZiIsImF6cCI6ImNmIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9pZCI6Ijg4ZWI2MzYzLWEyOTMtNGVlMi1hZDUxLTI4ZWQxNmZmMzA3NCIsIm9yaWdpbiI6InVhYSIsInVzZXJfbmFtZSI6Imtqa29uZ2tqQGNuLmlibS5jb20iLCJlbWFpbCI6Imtqa29uZ2tqQGNuLmlibS5jb20iLCJyZXZfc2lnIjoiZDhlNGY0MDIiLCJpYXQiOjE0NTU2MDc1NDUsImV4cCI6MTQ1NTY1MDc0NSwiaXNzIjoiaHR0cHM6Ly91YWEuc3RhZ2UxLm5nLmJsdWVtaXgubmV0L29hdXRoL3Rva2VuIiwiemlkIjoidWFhIiwiYXVkIjpbImNsb3VkX2NvbnRyb2xsZXIiLCJwYXNzd29yZCIsImNmIiwib3BlbmlkIl19.nrzsEAZmGXNOWjX8r5Xf7U8Hj5-CE1rtHg8_C-jZKSk
    ```
- The returned long string begins with “bearer” is the AccessToken we will use in the request in {{site.data.keyword.autoscaling}} RESTful API, if you encounter some error, like “Command not found”, you can update your CloudFoundry command line tool to a newer version. 
- You can also find this AccessToken in the home folder, after you logged in Bluemix with installed CloudFoundry command line tool, there will be a .cf folder in your home folder, where you can find a JSON file name “config.json” which list all the environment information of your current logging like org/space, authentication endpoint and version, you will find an entry of “AccessToken” like below: 
+ The returned long string begins with “bearer” is the AccessToken we will use in the request in {{site.data.keyword.autoscaling}} RESTful API, if you encounter some error, like “Command not found”, you can update your CloudFoundry command line tool to a newer version.
+ 
+ You can also find this AccessToken in the home directory. After you logged in Bluemix with installed CloudFoundry command line tool, there will be a .cf folder in your home folder, where you can find a JSON file name “config.json” which list all the environment information of your current logging, like org/space, authentication endpoint and version, you will find an entry of “AccessToken” like below: 
     ```
    >cat ~/.cf/config.json
  {
@@ -82,9 +83,29 @@ To use the {{site.data.keyword.autoscaling}} RESTful API to manage {{site.data.k
  .....
  }
    ```
- the AccessToken in config.json will only valid for a period of time, if you get 401 Unauthorized response for REST API request, you might need login in again to refresh the config.json and get the new AcessToken 
+ the AccessToken in config.json will only valid for a period of time, if you get 401 Unauthorized response for REST API request, you might need login in again to refresh the config.json and get the new AcessToken. 
  
-2.  You can obtain the URL of {{site.data.keyword.autoscaling}} API server by checking the VCAP_SERVICE environment after you have bound your application with {{site.data.keyword.autoscaling}} service. In VCAP_SERVICE, you can find the {{site.data.keyword.autoscaling}} service section, and the “api_url” is the URL of API server that your application is bound with, you need this URL for request {{site.data.keyword.autoscaling}} RESTful API service, also this url can be found through the cf env APPNAME command:
+2.  You can obtain the URL of {{site.data.keyword.autoscaling}} API server by checking the VCAP_SERVICE environment variable after you have bound your application with {{site.data.keyword.autoscaling}} service. In VCAP_SERVICE, you can find the {{site.data.keyword.autoscaling}} service section, and the “api_url” is the URL of API server that your application is bound with, you need this URL for request {{site.data.keyword.autoscaling}} RESTful API service:
+   ```
+    {
+      "Auto-Scaling": [
+      {
+         "name": "Auto-Scaling-iw",
+         "label": "Auto-Scaling",
+         "plan": "free",
+         "credentials": {
+            "agentUsername": "agent",
+            "api_url": "https://ScalingAPI.ng.bluemix.net",
+            "service_id": "3f42b7ff-d939-4ff2-9a55-cb09cef9ab9e",
+            "app_id": "2287f442-a7f3-4799-8919-d3908c386fa3",
+            "url": "https://Scaling3.ng.bluemix.net",
+            "agentPassword": "0cddf80b-37e1-4cfd-b648-83a6c8wee69f"
+         }
+      }
+     ]
+   }
+   ``` 
+    also this url can be found through the cf env APPNAME command:
    ```
    > cf env Hello
    Getting env variables for app Hello in org OE_Runtimes_SVT / space RT_SVT as Alice...
@@ -122,7 +143,9 @@ To use the {{site.data.keyword.autoscaling}} RESTful API to manage {{site.data.k
    > 
    ```
 
-With all the above prerequisites, you can now make REST API request by two ways: RestClient add-on in browser or just through some tool like curl. With REST Client Add-on, like those for Firefox or Chrome, you can trigger REST request to {{site.data.keyword.autoscaling}} API server to execute your command, what you need to supply to add-on are: URL of this REST API, method and header that required by this REST API, and the parameters in the body part. Detailed description of each API can be found at [Rest API of IBM {{site.data.keyword.autoscaling}} for {{site.data.keyword.Bluemix_notm}}](https://www.{DomainName}/docs/api/content/api/auto-scaling/index.html){:new_window}, with tools like curl, you can manage the {{site.data.keyword.autoscaling}} service throught a script file like below:    
+With all the above prerequisites, you can now make REST API request by two ways: RestClient add-on in browser or just through some tool like curl. With REST Client Add-on, like those for Firefox or Chrome, you can trigger REST request to {{site.data.keyword.autoscaling}} API server to execute your command, what you need to supply to these add-on are: URL of this REST API, method and headers that required by this REST API, and the parameters in the body part. Detailed description of each API can be found at [Rest API of IBM {{site.data.keyword.autoscaling}} for {{site.data.keyword.Bluemix_notm}}](https://www.{DomainName}/docs/api/content/api/auto-scaling/index.html){:new_window}.
+
+with tools like curl, you can manage the {{site.data.keyword.autoscaling}} service throught a script file like below:    
 ```
     cf login -a http://api.ng.bluemix.net -u Alice -p pa55w0rd --skip-ssl-validation
     accessToken=$(cf oauth-token | grep bearer | sed -e s/bearer/Bearer/g)
