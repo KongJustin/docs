@@ -52,11 +52,11 @@ If the workload of your application changes dramatically during the peak time an
 ## Manage {{site.data.keyword.autoscaling}} service through RESTful API 
 {: #RESTAPI}
 
-With the introduction of {{site.data.keyword.autoscaling}} RESTful API, now you have an alternative way to manage {{site.data.keyword.autoscaling}} service beside the Bluemix UI, it also support the scaling data retrieval and analysis. Currently it provide similar functionality in {{site.data.keyword.Bluemix_notm}} UI with API like Create Policy and Get Scaling History
+{{site.data.keyword.autoscaling}} RESTful API provides an alternative way to manage {{site.data.keyword.autoscaling}} service beside the Bluemix UI, and it also supports the scaling data retrieval and analysis. It provides similar functionalities, such as Creating a Policy and Getting the Scaling History, as in the {{site.data.keyword.Bluemix_notm}} UI with API.
 
-To use the {{site.data.keyword.autoscaling}} RESTful API to manage {{site.data.keyword.autoscaling}} service, you need to prepare the following prerequisites: Bind {{site.data.keyword.autoscaling}} service with your application as specified in above section, acquire AccessToken, the URL of {{site.data.keyword.autoscaling} API server and the app_id of the application of you want to scale in/out:
+To use the {{site.data.keyword.autoscaling}} RESTful API to manage the {{site.data.keyword.autoscaling}} service, complete the following prerequisites: Bind the {{site.data.keyword.autoscaling}} service with your application as specified in previous section, acquire the `AccessToken`, the URL of {{site.data.keyword.autoscaling} API server and the `app_id` of the application that you want to scale in or out:
 
-1. For security purpose, in each request header of {{site.data.keyword.autoscaling}} RESTful API, a proper AccessToken obtained through CloudFoundry UAA procedure should be provided in Authorization header to indicate necessary validation of the request, fail to comply with this will trigger a 401 Unauthorized response, there are two ways you can get this AccessToken after you have installed CloudFoundry command line tool and logged in: you can obtain this token through cf oauth-token command:
+1. For security purpose, in each request header of {{site.data.keyword.autoscaling}} RESTful API, a proper `AccessToken` obtained through CloudFoundry UAA procedure must be provided in the `Authorization` header to indicate required validation of the request. Failing to comply with this `AccessToken` results in a 401 Unauthorized response. There are two ways you can get this `AccessToken` after you install the Cloud Foundry command line tool and logged into the {{site.data.keyword.Bluemix_notm}}:<ul><li>you can obtain this token through `cf oauth-token` command:
    ```
    > cf oauth-token
    Getting OAuth token...
@@ -64,9 +64,7 @@ To use the {{site.data.keyword.autoscaling}} RESTful API to manage {{site.data.k
 
      bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJhNjIzMGE1YS1mNzE3LTQ0YjItOWM3Yi1kNGJkYThhZGU0NjkiLCJzdWIiOiI4OGViNjM2My1hMjkzLTRlZTItYWQ1MS0yOGVkMTZmZjMwNzQiLCJzY29wZSI6WyJjbG91ZF9jb250cm9sbGVyLnJlYWQiLCJwYXNzd29yZC53cml0ZSIsImNsb3VkX2NvbnRyb2xsZXIud3JpdGUiLCJvcGVuaWQiXSwiY2xpZW50X2lkIjoiY2YiLCJjaWQiOiJjZiIsImF6cCI6ImNmIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9pZCI6Ijg4ZWI2MzYzLWEyOTMtNGVlMi1hZDUxLTI4ZWQxNmZmMzA3NCIsIm9yaWdpbiI6InVhYSIsInVzZXJfbmFtZSI6Imtqa29uZ2tqQGNuLmlibS5jb20iLCJlbWFpbCI6Imtqa29uZ2tqQGNuLmlibS5jb20iLCJyZXZfc2lnIjoiZDhlNGY0MDIiLCJpYXQiOjE0NTU2MDc1NDUsImV4cCI6MTQ1NTY1MDc0NSwiaXNzIjoiaHR0cHM6Ly91YWEuc3RhZ2UxLm5nLmJsdWVtaXgubmV0L29hdXRoL3Rva2VuIiwiemlkIjoidWFhIiwiYXVkIjpbImNsb3VkX2NvbnRyb2xsZXIiLCJwYXNzd29yZCIsImNmIiwib3BlbmlkIl19.nrzsEAZmGXNOWjX8r5Xf7U8Hj5-CE1rtHg8_C-jZKSk
    ```
- The returned long string begins with “bearer” is the AccessToken we will use in the request in {{site.data.keyword.autoscaling}} RESTful API, if you encounter some error, like “Command not found”, you can update your CloudFoundry command line tool to a newer version.
- 
- You can also find this AccessToken in the home directory. After you logged in Bluemix with installed CloudFoundry command line tool, there will be a .cf folder in your home folder, where you can find a JSON file name “config.json” which list all the environment information of your current logging, like org/space, authentication endpoint and version, you will find an entry of “AccessToken” like below: 
+The returned long string begins with “bearer” is the AccessToken that can be used in the request of {{site.data.keyword.autoscaling}} RESTful API. If you encounter errors such as “Command not found”, you can update your Cloud Foundry command line tool to a newer version.</li><li>You can also find this AccessToken in the home directory. After you logged into {{site.data.keyword.Bluemix_notm}} from the command line interface, a `.cf` folder is created in your home folder, where you can find a JSON file name `config.json`  that contains a list of the environment information of your current logging, such as organization, space, authentication endpoint and version. You can locate an entry `AccessToken` in the file as the following : 
     ```
    >cat ~/.cf/config.json
  {
@@ -83,9 +81,9 @@ To use the {{site.data.keyword.autoscaling}} RESTful API to manage {{site.data.k
  .....
  }
    ```
- the AccessToken in config.json will only valid for a period of time, if you get 401 Unauthorized response for REST API request, you might need login in again to refresh the config.json and get the new AcessToken. 
+The `AccessToken` in the `config.json` only valid for a period of time. If you get a 401 Unauthorized response for REST API request, you might have to login in again from the command line interface to refresh the file and get the new `AcessToken`. </li></ul>
  
-2.  You can obtain the URL of {{site.data.keyword.autoscaling}} API server by checking the VCAP_SERVICE environment variable after you have bound your application with {{site.data.keyword.autoscaling}} service. In VCAP_SERVICE, you can find the {{site.data.keyword.autoscaling}} service section, and the “api_url” is the URL of API server that your application is bound with, you need this URL for request {{site.data.keyword.autoscaling}} RESTful API service:
+2.  You can obtain the URL of {{site.data.keyword.autoscaling}} API server by checking the `VCAP_SERVICE` environment variable after you bind your application with the {{site.data.keyword.autoscaling}} service. In the `VCAP_SERVICE`, you can find the {{site.data.keyword.autoscaling}} service section, and the `api_url` is the URL of API server that your application is bound with. You need this API server URL to connect to {{site.data.keyword.autoscaling}} RESTful API service:
    ```
     {
       "Auto-Scaling": [
@@ -105,7 +103,7 @@ To use the {{site.data.keyword.autoscaling}} RESTful API to manage {{site.data.k
      ]
    }
    ``` 
-    also this url can be found through the cf env APPNAME command:
+   Note that this url can also be found through the `cf env APPNAME` command:
    ```
    > cf env Hello
    Getting env variables for app Hello in org OE_Runtimes_SVT / space RT_SVT as Alice...
@@ -135,7 +133,7 @@ To use the {{site.data.keyword.autoscaling}} RESTful API to manage {{site.data.k
      }
    ...
    ```  
-3.  app_id can also be found in above VCAP_SERVICES enviroment variable, or just run the cf app APPNAME --guid command:
+3.  You can get the `app_id` from the `VCAP_SERVICES` enviroment variable, or just run the `cf app APPNAME --guid` command:
 
    ```
    > cf app Hello --guid
@@ -143,9 +141,11 @@ To use the {{site.data.keyword.autoscaling}} RESTful API to manage {{site.data.k
    > 
    ```
 
-With all the above prerequisites, you can now make REST API request by two ways: RestClient add-on in browser or just through some tool like curl. With REST Client Add-on, like those for Firefox or Chrome, you can trigger REST request to {{site.data.keyword.autoscaling}} API server to execute your command, what you need to supply to these add-on are: URL of this REST API, method and headers that required by this REST API, and the parameters in the body part. Detailed description of each API can be found at [Rest API of IBM {{site.data.keyword.autoscaling}} for {{site.data.keyword.Bluemix_notm}}](https://www.{DomainName}/docs/api/content/api/auto-scaling/index.html){:new_window}.
+With all the above prerequisites, you can now make REST API request by using the RestClient add-on in browser or just through some tool like `curl`. 
 
-with tools like curl, you can manage the {{site.data.keyword.autoscaling}} service throught a script file like below:    
+With REST Client Add-on, like those for Firefox or Chrome, you can trigger REST request to {{site.data.keyword.autoscaling}} API server to execute your command. You just supply these add-on with the URL of the REST API, method and headers that are required by this REST API, and the parameters in the body part. For more details about each API, see [Rest API of IBM {{site.data.keyword.autoscaling}} for {{site.data.keyword.Bluemix_notm}}](https://www.{DomainName}/docs/api/content/api/auto-scaling/index.html){:new_window}.
+
+With tools like `curl`, you can manage the {{site.data.keyword.autoscaling}} service within a script as following:    
 ```
     cf login -a http://api.ng.bluemix.net -u Alice -p pa55w0rd --skip-ssl-validation
     accessToken=$(cf oauth-token | grep bearer | sed -e s/bearer/Bearer/g)
@@ -168,7 +168,7 @@ with tools like curl, you can manage the {{site.data.keyword.autoscaling}} servi
 ## Manage {{site.data.keyword.autoscaling}} service through {{site.data.keyword.autoscaling}} CLI 
 {: #CLI}
 
-  {{site.data.keyword.autoscaling}} CLI provide similar functionality as {{site.data.keyword.autoscaling}} RESTful API but in a more friendly way to configure {{site.data.keyword.autoscaling}} service. With {{site.data.keyword.autoscaling}} CLI you need not to care about the details in {{site.data.keyword.autoscaling}} RESTful API, like AccessToken and URL of API server, what you need is just following the step by step directions it provide. Details about how to install and use {{site.data.keyword.autoscaling}} CLI can be found at [{{site.data.keyword.autoscaling}} CLI](../../cli/plugins/auto-scaling/index.html){:new_window}
+ {{site.data.keyword.autoscaling}} CLI provide similar functionality as {{site.data.keyword.autoscaling}} RESTful API but in a more friendly way to configure {{site.data.keyword.autoscaling}} service. With {{site.data.keyword.autoscaling}} CLI you do not have to  care about the details in {{site.data.keyword.autoscaling}} RESTful API, such as `AccessToken` and URL of API server. All you need is just following the step by step directions that the CLI provides. For more details about how to install and use {{site.data.keyword.autoscaling}} CLI, see [{{site.data.keyword.autoscaling}} CLI](../../cli/plugins/auto-scaling/index.html){:new_window}
 
 ## Policy fields for the {{site.data.keyword.autoscaling}} service
 {: #policyfields}
