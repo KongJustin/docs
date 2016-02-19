@@ -81,9 +81,9 @@ The returned long string begins with “bearer” is the `AccessToken` that can 
  .....
  }
    ```
-The `AccessToken` in the `config.json` only valid for a period of time. If you get a 401 Unauthorized response for REST API request, you might have to login in again from the command line interface to refresh the file and get the new `AcessToken`. </li></ul>
+The `AccessToken` in the `config.json` only valid for a period of time. If you get a 401 Unauthorized response for RESTful API request, you might have to login in again from the command line interface to refresh the file and get the new `AcessToken`. </li></ul>
  
-2. Endpoint: {{site.data.keyword.autoscaling}} API server serves as the endpoint of RESTful API.  You can obtain the URL of {{site.data.keyword.autoscaling}} API server by checking the `VCAP_SERVICE` environment variable after you bind your application with the {{site.data.keyword.autoscaling}} service. The `api_url` in the `credentials` part of  {{site.data.keyword.autoscaling}} service section in the `VCAP_SERVICE`is the URL of API server that your application is bound with. Check [Binding Credentials](http://docs.cloudfoundry.org/services/binding-credentials.html) for more information about the structure and key fields used in service credentials in Cloud Foundry :
+2. Endpoint: {{site.data.keyword.autoscaling}} API server serves as the endpoint of RESTful API. <ul><li> You can obtain the URL of {{site.data.keyword.autoscaling}} API server by checking the `VCAP_SERVICE` environment variable after you bind your application with the {{site.data.keyword.autoscaling}} service. The `api_url` in the `credentials` part of  {{site.data.keyword.autoscaling}} service section in the `VCAP_SERVICE`is the URL of API server that your application is bound with. Check [Binding Credentials](http://docs.cloudfoundry.org/services/binding-credentials.html) for more information about the structure and key fields used in service credentials in Cloud Foundry :
    ```
     {
       "Auto-Scaling": [
@@ -103,7 +103,8 @@ The `AccessToken` in the `config.json` only valid for a period of time. If you g
      ]
    }
    ``` 
-   Note that this url can also be found through the `cf env APPNAME` command, it's more useful when you want to use a script file to manage {{site.data.keyword.autoscaling}} service through RESTful API :
+   
+   </li><li>Note that this url can also be found through the `cf env APPNAME` command, it's more useful when you want to use a script file to manage {{site.data.keyword.autoscaling}} service through RESTful API :
    ```
    > cf env Hello
    Getting env variables for app Hello in org OE_Runtimes_SVT / space RT_SVT as Alice...
@@ -133,6 +134,7 @@ The `AccessToken` in the `config.json` only valid for a period of time. If you g
      }
    ...
    ```  
+   </li></ul>
 3. app_id: app_id is used in every RESTful API. You can get the `app_id` from the `VCAP_SERVICES` enviroment variable, or just run the `cf app APPNAME --guid` command:
 
    ```
@@ -140,25 +142,25 @@ The `AccessToken` in the `config.json` only valid for a period of time. If you g
    aa8d19b6-eceb-4b6e-b034-926a87e98a51
    > 
    ```
-4. API: Currently serveral RESTful APIs are provided with nearly the same funtionality that {{site.data.keyword.Bluemix_notm}} UI can do: Usually you create policy for your application at first, and check scaling data by query scaling history, then you can update the existing policy to refine the scaling behaviour or cope with new service requirement. You can also temporarily disable/enable policy and check current policy status.<ul>
+4. API: Currently serveral RESTful APIs are provided with nearly the same funtionality that {{site.data.keyword.Bluemix_notm}} UI can do: Usually you create policy for your application at first, and check scaling data by querying scaling history, then you can update the existing policy to refine the scaling behaviour or cope with new service requirement. You can also temporarily disable/enable policy and check current policy status.<ul>
 <li> Create/Update Policy: Use this API to create/update policy that will guide the scaling action for your application, in this API, you need to supply a policy file in JSON format that contains the key elements in a Policy definition, like instance count and metric type, like what you do by click *Create {{site.data.keyword.autoscaling}} Policy* in {{site.data.keyword.Bluemix_notm}} UI.
 <li> Delete Policy: Use this API if you do not need policy anymore.
 <li> Enable/Disable Policy: Use this API to temporarily enable/disable current policy setting.
 <li> Query Policy status: Use this API to check current policy status: enabled or disabled.
-<li> Query Scaling History: Use this API to get Scaling data including the timing, the reason and the instance number of scaling action. You can specify the time range to narrow down the result in this API</ul>
+<li> Query Scaling History: Use this API to get Scaling data including the timing, the reason and the instance number of scaling action. You can specify the time range to narrow down the result in this API.</ul>
 
-    You can make REST API request by using the RestClient add-on in browser or just through some tool like `curl`. 
+    You can make RESTful API request by using the RestClient add-on in browser or just through some tool like `curl`. 
 
-    <ul><li>With REST Client Add-on, like those for Firefox or Chrome, you can trigger REST request to {{site.data.keyword.autoscaling}} API server to execute your command. You just supply these add-on with the URL of the REST API, method and headers that are required by this REST API, and the parameters in the body part.</li> 
+    <ul><li>With REST Client Add-on, like those for Firefox or Chrome, you can trigger REST request to {{site.data.keyword.autoscaling}} API server to execute your command. You just supply these add-on with the URL of the RESTful API, method and headers that are required by this RESTful API, and the parameters in the body part.</li> 
 
-    <li>With tools like `curl`, you can manage the {{site.data.keyword.autoscaling}} service within a script file, the Cloud Foundry command listed in the above section will help you to write you own script</li></ul>
+    <li>With tools like `curl`, you can manage the {{site.data.keyword.autoscaling}} service within a script file, the Cloud Foundry command listed in the above section will help you to write you own script.</li></ul>
 
 5. The swagger page at [Rest API of IBM {{site.data.keyword.autoscaling}} for {{site.data.keyword.Bluemix_notm}}](https://www.{DomainName}/docs/api/content/api/auto-scaling/index.html){:new_window} provide a more interactive and detailed description of each RESTful API. In the `Model` tab part of each API you will find detailed definition of each field that used in this API.
 
 ## Manage {{site.data.keyword.autoscaling}} service through {{site.data.keyword.autoscaling}} CLI 
 {: #CLI}
 
- {{site.data.keyword.autoscaling}} CLI provide similar functionality as {{site.data.keyword.autoscaling}} RESTful API but in a more friendly way to configure {{site.data.keyword.autoscaling}} service. With {{site.data.keyword.autoscaling}} CLI you do not have to  care about the details in {{site.data.keyword.autoscaling}} RESTful API, such as `AccessToken` and URL of API server. All you need is just following the step by step directions that the CLI provides. For more details about how to install and use {{site.data.keyword.autoscaling}} CLI, see [{{site.data.keyword.autoscaling}} CLI](../../cli/plugins/auto-scaling/index.html){:new_window}
+ {{site.data.keyword.autoscaling}} CLI provide similar functionality as {{site.data.keyword.autoscaling}} RESTful API but in a more friendly way to configure {{site.data.keyword.autoscaling}} service. With {{site.data.keyword.autoscaling}} CLI you do not have to care about the details in {{site.data.keyword.autoscaling}} RESTful API, such as `AccessToken` and URL of API server. All you need is just following the step by step directions that the CLI provides. For more details about how to install and use {{site.data.keyword.autoscaling}} CLI, see [{{site.data.keyword.autoscaling}} CLI](../../cli/plugins/auto-scaling/index.html){:new_window}.
 
 ## Policy fields for the {{site.data.keyword.autoscaling}} service
 {: #policyfields}
