@@ -7,7 +7,7 @@
 
 *Last updated: 19 January 2015*
 
-In {{site.data.keyword.Bluemix_notm}}, you can automatically manage your application capacity. Use the  {{site.data.keyword.autoscalingfull}} service to automatically increase or decrease the compute capacity of your application. The number of application instances are adjusted dynamically based on the {{site.data.keyword.autoscaling}} policy that you define. There are several ways to manage service by performing tasks like define {{site.data.keyword.autoscaling}} policy and get {{site.data.keyword.autoscaling}} data,  which will be covered in the following part of this document.
+In {{site.data.keyword.Bluemix_notm}}, you can automatically manage your application capacity. Use the  {{site.data.keyword.autoscalingfull}} service to automatically increase or decrease the compute capacity of your application. The number of application instances are adjusted dynamically based on the {{site.data.keyword.autoscaling}} policy that you define. There are several ways to manage service and perform tasks like define {{site.data.keyword.autoscaling}} policy and get {{site.data.keyword.autoscaling}} data,  which will be covered in the following part of this document.
 {:shortdesc} 
 
 ## Contents
@@ -153,7 +153,7 @@ You can make REST API request by using the RestClient add-on in browser or just 
 
 <li>With tools like `curl`, you can manage the {{site.data.keyword.autoscaling}} service within a script file, the Cloud Foundry command listed in the above section will help you to write you own script</li></ul>
 
-For more details about each API, see [Rest API of IBM {{site.data.keyword.autoscaling}} for {{site.data.keyword.Bluemix_notm}}](https://www.{DomainName}/docs/api/content/api/auto-scaling/index.html){:new_window}. Descriptions of each field can be found in the `Model` tab part of each API.
+5. The swagger page at [Rest API of IBM {{site.data.keyword.autoscaling}} for {{site.data.keyword.Bluemix_notm}}](https://www.{DomainName}/docs/api/content/api/auto-scaling/index.html){:new_window} provide a more interactive and detailed description of each RESTful API. In the `Model` tab part of each API you can found detailed definition of each field that used in this API.
 
 ## Manage {{site.data.keyword.autoscaling}} service through {{site.data.keyword.autoscaling}} CLI 
 {: #CLI}
