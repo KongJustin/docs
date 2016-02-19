@@ -140,20 +140,20 @@ The `AccessToken` in the `config.json` only valid for a period of time. If you g
    aa8d19b6-eceb-4b6e-b034-926a87e98a51
    > 
    ```
-4. API: Currently serveral RESTful APIs are provided with nearly the same funtionality that {{site.data.keyword.Bluemix_notm}} UI can do: you can use them to Create/Update/Delete policy, Enable/Disable policy, Query Policy status and Query Scaling History data.<ul>
+4. API: Currently serveral RESTful APIs are provided with nearly the same funtionality that {{site.data.keyword.Bluemix_notm}} UI can do: Usually you create policy for your application at first, and check scaling data by query scaling history, then you can update the existing policy to refine the scaling behaviour or cope with new service requirement. You can also temporarily disable/enable policy and check current policy status.<ul>
 <li> Create/Update Policy: Use this API to create/update policy that will guide the scaling action for your application, in this API, you need to supply a policy file in JSON format that contains the key elements in a Policy definition, like instance count and metric type, like what you do by click *Create {{site.data.keyword.autoscaling}} Policy* in {{site.data.keyword.Bluemix_notm}} UI.
 <li> Delete Policy: Use this API if you do not need policy anymore.
-<li> Enable/Disable: Use this API to temporarily enable/disable current policy setting.
+<li> Enable/Disable Policy: Use this API to temporarily enable/disable current policy setting.
 <li> Query Policy status: Use this API to check current policy status: enabled or disabled.
 <li> Query Scaling History: Use this API to get Scaling data including the timing, the reason and the instance number of scaling action. You can specify the time range to narrow down the result in this API</ul>
 
-You can make REST API request by using the RestClient add-on in browser or just through some tool like `curl`. 
+    You can make REST API request by using the RestClient add-on in browser or just through some tool like `curl`. 
 
-<ul><li>With REST Client Add-on, like those for Firefox or Chrome, you can trigger REST request to {{site.data.keyword.autoscaling}} API server to execute your command. You just supply these add-on with the URL of the REST API, method and headers that are required by this REST API, and the parameters in the body part.</li> 
+    <ul><li>With REST Client Add-on, like those for Firefox or Chrome, you can trigger REST request to {{site.data.keyword.autoscaling}} API server to execute your command. You just supply these add-on with the URL of the REST API, method and headers that are required by this REST API, and the parameters in the body part.</li> 
 
-<li>With tools like `curl`, you can manage the {{site.data.keyword.autoscaling}} service within a script file, the Cloud Foundry command listed in the above section will help you to write you own script</li></ul>
+    <li>With tools like `curl`, you can manage the {{site.data.keyword.autoscaling}} service within a script file, the Cloud Foundry command listed in the above section will help you to write you own script</li></ul>
 
-5. The swagger page at [Rest API of IBM {{site.data.keyword.autoscaling}} for {{site.data.keyword.Bluemix_notm}}](https://www.{DomainName}/docs/api/content/api/auto-scaling/index.html){:new_window} provide a more interactive and detailed description of each RESTful API. In the `Model` tab part of each API you can found detailed definition of each field that used in this API.
+5. The swagger page at [Rest API of IBM {{site.data.keyword.autoscaling}} for {{site.data.keyword.Bluemix_notm}}](https://www.{DomainName}/docs/api/content/api/auto-scaling/index.html){:new_window} provide a more interactive and detailed description of each RESTful API. In the `Model` tab part of each API you will find detailed definition of each field that used in this API.
 
 ## Manage {{site.data.keyword.autoscaling}} service through {{site.data.keyword.autoscaling}} CLI 
 {: #CLI}
